@@ -1,22 +1,29 @@
 package org.dev;
 
-import org.sql2o.Connection;
-import org.sql2o.Sql2o;
+import org.dev.dao.UserDao;
+import org.dev.exceptions.UserController;
+import org.dev.models.User;
+
+import java.util.List;
+import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
-        String connectionString = "jdbc:postgresql://localhost:5432/quiz-app-portal";
-        Sql2o sql2o = new Sql2o(connectionString, "postgres", "code001");
 
-        try(Connection connection = sql2o.open()){
-            String createUserTableSql = "CREATE TABLE user_table ("
-                    + "id SERIAL PRIMARY KEY,"
-                    + "firstName VARCHAR(50) NOT NULL,"
-                    + "lastName VARCHAR(50) NOT NULL,"
-                    + "email VARCHAR(100) NOT NULL,"
-                    + "password VARCHAR(100) NOT NULL"
-                    + ")";
-            connection.createQuery(createUserTableSql).executeUpdate();
-        }
+    private static final UserController userController = new UserController();
+    public static void main(String[] args) {
+        UserController userController = new UserController();
+
+        // Use the userController instance to call the desired methods
+        String signUpResult = userController.signUp();
+        System.out.println(signUpResult);
+
+        String logInResult = userController.logIn();
+        System.out.println(logInResult);
+
+
+
+
     }
+
+
 }
