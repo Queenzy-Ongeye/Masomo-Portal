@@ -11,12 +11,14 @@ public class Sql2oUserDao implements UserDao{
 
     public Sql2oUserDao(Sql2o sql2o) {
         this.sql2o = sql2o;
+
     }
 
-//    ======================= Adding a new user =====================//
+
+    //    ======================= Adding a new user =====================//
     @Override
     public void addUsers(User user) {
-        String sql = "INSERT INTO user-table (firstName, lastName, email, password) VALUES (:firstName, :lastName, :email, : password)";
+        String sql = "INSERT INTO user_table (firstName, lastName, email, password) VALUES (:firstName, :lastName, :email, :password)";
         try(Connection connection = sql2o.open()){
             int userId = (int) connection.createQuery(sql, true)
                     .addParameter("firstName", user.getFirstName())
@@ -34,7 +36,7 @@ public class Sql2oUserDao implements UserDao{
 
     @Override
     public User getUserById(int userId) {
-        String sql = "SELECT * FROM user-table WHERE id = :userId";
+        String sql = "SELECT id FROM user_table WHERE id = :userId";
         try(Connection connection = sql2o.open()){
             return connection.createQuery(sql)
                     .addParameter("userId", userId)
@@ -47,7 +49,7 @@ public class Sql2oUserDao implements UserDao{
 
     @Override
     public List<User> getAllUsers() {
-        String sql = "SELECT * FROM user-table";
+        String sql = "SELECT * FROM user_table";
         try(Connection connection = sql2o.open()){
             return connection.createQuery(sql)
                     .executeAndFetch(User.class);
@@ -57,7 +59,7 @@ public class Sql2oUserDao implements UserDao{
 //    ==================== Updating user's details =============== //
     @Override
     public void updateUser(User user) {
-        String sql = "UPDATE user-table SET firstName = :firstName, lastName = :lastName, email = :email, password = :password WHERE userId = :userId";
+        String sql = "UPDATE user_table SET firstName = :firstName, lastName = :lastName, email = :email, password = :password WHERE userId = :userId";
         try(Connection connection = sql2o.open()){
             connection.createQuery(sql)
                     .addParameter("firstName", user.getFirstName())
@@ -72,7 +74,7 @@ public class Sql2oUserDao implements UserDao{
 //    ======================== Deleting user by it's Id ====================== //
     @Override
     public void deleteUserById(int userId) {
-        String sql = "DELETE * FROM user-table WHERE userId = :userId";
+        String sql = "DELETE FROM user_table WHERE userId = :userId";
 
         try(Connection connection = sql2o.open()){
             connection.createQuery(sql)
@@ -81,4 +83,17 @@ public class Sql2oUserDao implements UserDao{
         }
 
     }
+
+    //    ======================== Checking if a user exists =================== //
+    public boolean checkUserCredentials(int userId,String email, String password){
+        User user = getUserById(userId);
+
+        if (user == null){
+            return false;
+        }
+
+        return user.getEmail().equals(email) && user.getPassword().equals(password);
+    }
+
+
 }
