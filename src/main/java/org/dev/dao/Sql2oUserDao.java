@@ -18,13 +18,14 @@ public class Sql2oUserDao implements UserDao{
     //    ======================= Adding a new user =====================//
     @Override
     public void addUsers(User user) {
-        String sql = "INSERT INTO user_table (firstName, lastName, email, password) VALUES (:firstName, :lastName, :email, :password)";
+        String sql = "INSERT INTO user_table (firstName, lastName, email, password, role) VALUES (:firstName, :lastName, :email, :password, :role)";
         try(Connection connection = sql2o.open()){
             int userId = (int) connection.createQuery(sql, true)
                     .addParameter("firstName", user.getFirstName())
                     .addParameter("lastName", user.getLastName())
                     .addParameter("email", user.getEmail())
                     .addParameter("password", user.getPassword())
+                    .addParameter("role", user.getRole())
                     .executeUpdate()
                     .getKey();
             user.setUserId(userId);
@@ -36,7 +37,7 @@ public class Sql2oUserDao implements UserDao{
 
     @Override
     public User getUser(String email, String password) {
-        String sql = "SELECT id as userId, email, password FROM user_table WHERE email = :email AND password = :password";
+        String sql = "SELECT userId, email, password FROM user_table WHERE email = :email AND password = :password";
         try(Connection connection = sql2o.open()){
             return connection.createQuery(sql)
                     .addParameter("email", email)
@@ -93,7 +94,6 @@ public class Sql2oUserDao implements UserDao{
         if (user == null){
             return false;
         }
-        System.out.println(user.getUserId());
         return user.getEmail().equals(email) && user.getPassword().equals(password);
     }
 }
