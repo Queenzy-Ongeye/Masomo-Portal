@@ -8,4 +8,5 @@ CREATE TABLE IF NOT EXISTS user_table(
     lastName VARCHAR,
     email VARCHAR,
     password VARCHAR,
+    role VARCHAR
 );
