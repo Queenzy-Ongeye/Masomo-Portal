@@ -22,6 +22,7 @@ public class UserController {
 
         System.out.print("Enter your email: ");
         String email = scanner.nextLine();
+        System.out.println("Here's your email....."+ email);
 
         System.out.print("Enter your password: ");
         String password = scanner.nextLine();
@@ -32,29 +33,28 @@ public class UserController {
         user.setEmail(email);
         user.setPassword(password);
 
-        sql2oUserDao.addUsers(user);
+        boolean isValidUser = sql2oUserDao.checkUserCredentials(email, password);
 
-
-
-        return "User created";
+        if (isValidUser){
+            return "Account Exists";
+        }else{
+            sql2oUserDao.addUsers(user);
+            return "User created";
+        }
     }
 
     public String logIn(){
 
         Scanner scanner = new Scanner(System.in);
-
-        System.out.print("Enter your user ID: ");
-        int userId = scanner.nextInt();
-
-        scanner.nextLine(); // Consume the newline character
-
         System.out.print("Enter your email: ");
         String email = scanner.nextLine();
+        System.out.println("Here's your email....."+ email);
+
 
         System.out.print("Enter your password: ");
         String password = scanner.nextLine();
 
-        boolean isValidUser = sql2oUserDao.checkUserCredentials(userId, email, password);
+        boolean isValidUser = sql2oUserDao.checkUserCredentials(email, password);
 
         if (isValidUser){
             return "Logged in successfully";
