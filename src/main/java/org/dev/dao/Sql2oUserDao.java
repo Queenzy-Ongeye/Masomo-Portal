@@ -32,14 +32,15 @@ public class Sql2oUserDao implements UserDao{
 
     }
 
-//   =================== Finding user by it's Id ================= //
+//   =================== Finding user by email and password ================= //
 
     @Override
-    public User getUserById(int userId) {
-        String sql = "SELECT id FROM user_table WHERE id = :userId";
+    public User getUser(String email, String password) {
+        String sql = "SELECT id as userId, email, password FROM user_table WHERE email = :email AND password = :password";
         try(Connection connection = sql2o.open()){
             return connection.createQuery(sql)
-                    .addParameter("userId", userId)
+                    .addParameter("email", email)
+                    .addParameter("password", password)
                     .executeAndFetchFirst(User.class);
 
         }
@@ -73,27 +74,26 @@ public class Sql2oUserDao implements UserDao{
 
 //    ======================== Deleting user by it's Id ====================== //
     @Override
-    public void deleteUserById(int userId) {
-        String sql = "DELETE FROM user_table WHERE userId = :userId";
+    public void deleteUserByEmail(String email) {
+        String sql = "DELETE FROM user_table WHERE email = :email";
 
         try(Connection connection = sql2o.open()){
             connection.createQuery(sql)
-                    .addParameter("userId", userId)
+                    .addParameter("userId")
+                    .addParameter("email", email)
                     .executeUpdate();
         }
 
     }
 
     //    ======================== Checking if a user exists =================== //
-    public boolean checkUserCredentials(int userId,String email, String password){
-        User user = getUserById(userId);
+    public boolean checkUserCredentials(String email, String password){
+        User user = getUser(email, password);
 
         if (user == null){
             return false;
         }
-
+        System.out.println(user.getUserId());
         return user.getEmail().equals(email) && user.getPassword().equals(password);
     }
-
-
 }
