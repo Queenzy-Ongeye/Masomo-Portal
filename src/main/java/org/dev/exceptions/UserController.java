@@ -22,16 +22,19 @@ public class UserController {
 
         System.out.print("Enter your email: ");
         String email = scanner.nextLine();
-        System.out.println("Here's your email....."+ email);
 
         System.out.print("Enter your password: ");
         String password = scanner.nextLine();
+
+        System.out.print("Enter your role: ");
+        String role = scanner.nextLine();
 
         User user = new User();
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setEmail(email);
         user.setPassword(password);
+        user.setRole(role);
 
         boolean isValidUser = sql2oUserDao.checkUserCredentials(email, password);
 
@@ -48,8 +51,6 @@ public class UserController {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter your email: ");
         String email = scanner.nextLine();
-        System.out.println("Here's your email....."+ email);
-
 
         System.out.print("Enter your password: ");
         String password = scanner.nextLine();
