@@ -9,11 +9,13 @@ import java.util.Scanner;
 
 public class Main {
 
-    private static final UserController userController = new UserController();
     public static void main(String[] args) {
+
+        System.out.println("Welcome to Masomo Portal \n 'Where learning and fun combine \uD83D\uDE0A'");
         UserController userController = new UserController();
 
-        // Use the userController instance to call the desired methods
+//         Use the userController instance to call the desired methods
+
         String signUpResult = userController.signUp();
         System.out.println(signUpResult);
 
